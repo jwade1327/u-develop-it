@@ -37,15 +37,15 @@ router.get('/voter/:id', (req, res) => {
     });
 });
 
-router.post('/voter', (req, res) => {
-    const sql = 'INSERT INTO voters (first_name, last_name, email) VALUES (?,?,?)';
-    const params = [body.first_name, body.last_name, body.email];
+router.post('/voter', ({body}, res) => {
     const errors = inputCheck(body, 'first_name', 'last_name', 'email');
-
     if (errors) {
         res.status(400).json({ error: errors });
         return;
     }
+
+    const sql = 'INSERT INTO voters (first_name, last_name, email) VALUES (?,?,?)';
+    const params = [body.first_name, body.last_name, body.email];
 
     db.run(sql, params, function(err, data) {
         if (err) {
